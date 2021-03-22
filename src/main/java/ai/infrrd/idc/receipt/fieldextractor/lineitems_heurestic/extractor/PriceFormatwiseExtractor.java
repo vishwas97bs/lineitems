@@ -22,10 +22,10 @@ public class PriceFormatwiseExtractor {
     public int getCountOfLinesWithPrice( String text )
     {
         String ocrText = text.toLowerCase();
-        String[] lines = (String[]) getStringLines( ocrText ).toArray();
+        Object[] lines =  getStringLines( ocrText ).toArray();
         int linesCount = 0;
-        for ( String line : lines ) {
-            if ( StringUtils.checkIfStringContainsRegexPattern( line, PRICE_REGEX ) )
+        for ( Object line : lines ) {
+            if ( StringUtils.checkIfStringContainsRegexPattern( line.toString(), PRICE_REGEX ) )
                 linesCount++;
         }
         return linesCount;
@@ -39,6 +39,7 @@ public class PriceFormatwiseExtractor {
      */
     public static List<String> getStringLines(String text )
     {
+        System.out.println("size inside the getstringlines is "+Arrays.asList( text.split( "\n" ) ).size());
         return Arrays.asList( text.split( "\n" ) );
     }
 

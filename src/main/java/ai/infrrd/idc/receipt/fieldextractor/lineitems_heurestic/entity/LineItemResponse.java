@@ -12,12 +12,8 @@ public class LineItemResponse
     private List<LineItem> lineItems;
     private float confidence;
 
-    private Utils utils;
+    private Utils utils = new Utils();
 
-    @Autowired
-    public void setUtils(Utils utils) {
-        this.utils = utils;
-    }
 
     @Override
     public String toString()

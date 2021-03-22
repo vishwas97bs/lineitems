@@ -93,14 +93,14 @@ public class ReceiptLineItemSummarizer
             //            }
             responseMap.put( "confidence", lineItemResponse.getConfidence() );
             responseMap.put( "lineitems", items );
-            LOG.debug( "Final line item response : {} for {}", responseMap, scanId );
+            LOG.info( "Final line item response : {} for {}", responseMap, scanId );
 
-            tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
+//            tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
         }
 
-        LOG.info( "Extracted {} lineItems for scanId: {} with confidence {}", lineItemResponse.getLineItems().size(), scanId,
-            lineItemResponse.getConfidence() );
-        tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
+//        LOG.info( "Extracted {} lineItems for scanId: {} with confidence {}", lineItemResponse.getLineItems().size(), scanId,
+//            lineItemResponse.getConfidence() );
+//        tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
 
     }
 

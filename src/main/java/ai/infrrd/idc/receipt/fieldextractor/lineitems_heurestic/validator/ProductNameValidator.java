@@ -6,6 +6,7 @@ import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.Exceptions.LineE
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.*;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.extractor.ReceiptLineItemExtractor;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.service.ConfigService;
+import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.service.GimletConfigService;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,13 @@ public class ProductNameValidator extends FieldValidator
 
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger( ProductNameValidator.class );
     private static final String STRICT_QUANTITY_REGEX = "(?i)(\\d{1,2}[.,]?\\d{0,3}(\\s)?"
-            + UomValidator.getUomRegex().substring( 0, UomValidator.getUomRegex().length() - 1 ) + "|x))";
+        + UomValidator.getUomRegex().substring( 0, UomValidator.getUomRegex().length() - 1 ) + "|x))";
 
     private static final String COMMON_NAME_REGEX = "((\\b| )[a-zA-ZÀ-žÀ-џ():.!+\"]{2,100}|[a-zA-ZÀ-žᎠ-Ᏼ&.\\-():\"]{3,100})((\\s){1,100}(\\d{1,3})([\\.,]\\d{1})?(\\s{0,2})(%))?|.*[\\d]{2}[a-zA-Z]+.*[/!].*[a-zA-Z]{2}";
 
     private static final String RECEIPT_NAME_SHOULD_NOT_HAVE_REGEX = "( |^|T)(([\\$\\-\\.]?((\\d{1,40}([.,/ ]|$)){1,4})|((\\d{4,40}\\w{1,20})(\\s|$|\\)))|("
-            + PriceValidator.CURRENCIES_STRING.toString().replace( "|:|[^0-9A-Za-z]{1,100}|$\\s?\\d{2-3}\\.?\\d{0,2}", "" )
-            + ")([ ]?(\\d|$)))|(\\d{1,100} ))(?!%[a-zA-Z])";
+        + PriceValidator.CURRENCIES_STRING.toString().replace( "|:|[^0-9A-Za-z]{1,100}|$\\s?\\d{2-3}\\.?\\d{0,2}", "" )
+        + ")([ ]?(\\d|$)))|(\\d{1,100} ))(?!%[a-zA-Z])";
 
     private static final String QUANTITY_OR_JUNK_IN_PRODUCT_NAME_BEG = "( |^)((\\d{1,3}(\\s)?[*x](\\s))|(\\+\\+)(\\s))";
 
@@ -47,6 +48,8 @@ public class ProductNameValidator extends FieldValidator
     private ConfigService configService;
 
     private DiscountListValidator discountListValidator;
+
+    private GimletConfigService gimletConfigService;
 
 
     @Autowired
@@ -77,13 +80,22 @@ public class ProductNameValidator extends FieldValidator
     }
 
 
-//    public ProductNameValidator( Domain domain )
-//    {
-//        super( domain );
-//    }
-    public void setDomain(Domain domain){
+    @Autowired
+    public void setGimletConfigService( GimletConfigService gimletConfigService )
+    {
+        this.gimletConfigService = gimletConfigService;
+    }
+
+
+    //    public ProductNameValidator( Domain domain )
+    //    {
+    //        super( domain );
+    //    }
+    public void setDomain( Domain domain )
+    {
         this.domain = domain;
     }
+
 
     @Override
     public String setField( LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
@@ -92,8 +104,10 @@ public class ProductNameValidator extends FieldValidator
     {
         //TODO: put this after validating for junk values
         String inputLine = lineValidator.getRemainingLineString();
-        LOG.info( "Validating name for scanReq : {} and line: {}", extractionData.getRequestId(), inputLine );
-
+        LOG.info( "Validating name for scanReq : line: {}", inputLine );
+        if ( configuration == null ) {
+            configuration = gimletConfigService.getGimletConfig();
+        }
         String probableName = "";
         for ( String val : FILTER_WORDS ) {
             String toReplace = "(?i)( " + val + " )";
