@@ -28,11 +28,25 @@ public class LineItemController
 {
     private static final Logger LOGGER = LoggerFactory.getLogger( LineItemController.class );
 
-    @Autowired
+
     private ResponseBuilder responseBuilder;
 
-    @Autowired
+
     private LineItemService lineItemService;
+
+    @Autowired
+    public void setResponseBuilder( ResponseBuilder responseBuilder )
+    {
+        this.responseBuilder = responseBuilder;
+    }
+
+
+    @Autowired
+    public void setLineItemService( LineItemService lineItemService )
+    {
+        this.lineItemService = lineItemService;
+    }
+
 
     @PostMapping ( value = "/lineitems")
     @ApiOperation ( value = "extracting field data", response = FieldExtractionResponse.class)
