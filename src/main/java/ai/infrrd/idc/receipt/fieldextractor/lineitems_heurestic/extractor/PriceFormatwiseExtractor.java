@@ -39,7 +39,6 @@ public class PriceFormatwiseExtractor {
      */
     public static List<String> getStringLines(String text )
     {
-        System.out.println("size inside the getstringlines is "+Arrays.asList( text.split( "\n" ) ).size());
         return Arrays.asList( text.split( "\n" ) );
     }
 

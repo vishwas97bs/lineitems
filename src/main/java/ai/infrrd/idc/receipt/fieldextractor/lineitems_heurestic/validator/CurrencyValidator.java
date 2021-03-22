@@ -21,8 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+
 @Component
-public class CurrencyValidator extends FieldValidator{
+public class CurrencyValidator extends FieldValidator
+{
 
     private static Logger LOG = LoggerFactory.getLogger( CurrencyValidator.class );
     private static List<Tuple2<PatternExtractor, Double>> patternSet;
@@ -30,18 +32,17 @@ public class CurrencyValidator extends FieldValidator{
 
     // Currency notations
     private static final List<String> CURRENCIES = Arrays.asList( "USD", "US$", "EUR", "GBP", "SEK", "CHF", "CAD", "AUD", "NZD",
-            " C ", "ZAR", "CNY", "CRC", "BND", "$", "£", "AED", "AFN", "ALL", "AMD", "AOA", "ARS", "AWG", "AZN", "BAM", "BBD",
-            "BDT", "BGN", "BHD", "BIF", "BMD", "BOB", "BRL", "BSD", "BTN", "BWP", "BYR", "BZD", "CDF", "CLP", "COP", "CUP", "CVE",
-            "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "FJD", "FKP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD",
-            "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR",
-            "KPW", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT",
-            "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "OMR", "PAB", "PEN", "PGK",
-            "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SGD", "SHP", "SLL", "SOS",
-            "SRD", "STD", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "UYU", "UZS",
-            "VEF", "VND", "VUV", "WST", "XAF", "XCD", "XPF", "YER", "ZMW", "ZWL" );
+        " C ", "ZAR", "CNY", "CRC", "BND", "$", "£", "AED", "AFN", "ALL", "AMD", "AOA", "ARS", "AWG", "AZN", "BAM", "BBD",
+        "BDT", "BGN", "BHD", "BIF", "BMD", "BOB", "BRL", "BSD", "BTN", "BWP", "BYR", "BZD", "CDF", "CLP", "COP", "CUP", "CVE",
+        "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "FJD", "FKP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD",
+        "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR",
+        "KPW", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT",
+        "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "OMR", "PAB", "PEN", "PGK",
+        "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SGD", "SHP", "SLL", "SOS",
+        "SRD", "STD", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "UYU", "UZS",
+        "VEF", "VND", "VUV", "WST", "XAF", "XCD", "XPF", "YER", "ZMW", "ZWL" );
 
     static {
-
         StringBuilder regexBuilder = new StringBuilder();
         for ( String currency : CURRENCIES ) {
             regexBuilder.append( "|" + currency );
@@ -57,19 +58,13 @@ public class CurrencyValidator extends FieldValidator{
         patternSet.add( new Tuple2<>( new PatternExtractor( "[ ](" + regexBuilder.toString().toLowerCase() + ")[ ]" ), 0.9 ) );
         //ERROR_PADDED_LOWERCASE_CURRENCY_REGEX
         patternSet.add(
-                new Tuple2<>( new PatternExtractor( "[^a-zA-Z](" + regexBuilder.toString().toLowerCase() + ")[^a-zA-Z]" ), 0.8 ) );
+            new Tuple2<>( new PatternExtractor( "[^a-zA-Z](" + regexBuilder.toString().toLowerCase() + ")[^a-zA-Z]" ), 0.8 ) );
     }
 
-    public void setDomain(Domain domain){
-        this.domain=domain;
+    public void setDomain( Domain domain )
+    {
+        this.domain = domain;
     }
-
-
-//    public CurrencyValidator( Domain domain )
-//    {
-//        super( domain );
-//    }
-
 
     /**
      * Return true if field is compulsory, else return false
@@ -122,14 +117,14 @@ public class CurrencyValidator extends FieldValidator{
 
 
     @Override
-    public String setField(LineItem line, List<Integer> indexes, boolean setAllMatches, LineValidator helper,
-                           String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper, Map<String,Object> configuration )
+    public String setField( LineItem line, List<Integer> indexes, boolean setAllMatches, LineValidator helper,
+        String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper,
+        Map<String, Object> configuration )
     {
         String inputLine = helper.getRemainingLineString();
         List<Tuple2> currenciesMatched = matchCurrency( inputLine );
 
-        LOG.info( "Validating currency for scanReq : {} and line: {}. values matched : {}",
-                extractionHelper.getRequestId(), inputLine, currenciesMatched );
+        LOG.info( "Validating currency for scanReq  line: {}. values matched : {}", inputLine, currenciesMatched );
 
         if ( setAllMatches ) {
             if ( !currenciesMatched.isEmpty() ) {

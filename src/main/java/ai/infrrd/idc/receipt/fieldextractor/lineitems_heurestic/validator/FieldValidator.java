@@ -12,14 +12,6 @@ import java.util.Map;
 
 public abstract class FieldValidator
 {
-//    protected Domain domain;
-//
-//
-//    public Domain getDomain()
-//    {
-//        return domain;
-//    }
-
     /**
      * Return true if field is compulsory, else return false
      * @return boolean that defines whether the field is compulsory or not

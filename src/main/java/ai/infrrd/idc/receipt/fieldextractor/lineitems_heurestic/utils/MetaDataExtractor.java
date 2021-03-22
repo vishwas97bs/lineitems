@@ -6,6 +6,7 @@ import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.Header;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Scope("prototype")
 public class MetaDataExtractor
 {
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger( MetaDataExtractor.class );

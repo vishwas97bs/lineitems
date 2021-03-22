@@ -1,6 +1,7 @@
 package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.summarizer;
 
 import ai.infrrd.idc.commons.entities.FieldExtractionRequest;
+import ai.infrrd.idc.commons.entities.FieldExtractionResponse;
 import ai.infrrd.idc.commons.extractors.entities.Coordinates;
 import ai.infrrd.idc.commons.extractors.entities.VisionLineBlock;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.Exceptions.SpellCheckException;
@@ -48,15 +49,37 @@ public class ReceiptLineItemSummarizer
 
 
     @SuppressWarnings ( "unchecked")
-    public void summarize( Map<String, Object> extractedData, Map<String, Object> tabularData,
-        FieldExtractionRequest extractionData, Map<String, Object> fieldDetails, FieldConfiguration fieldConfiguration )
+    public Map<String, Object> summarize( Map<String, Object> extractedData, FieldExtractionRequest extractionData,
+        FieldConfiguration fieldConfiguration )
     {
+        //set the merchantname into this map
+        Map<String, Object> merchantMap = new HashMap<>();
+        Map<String, Object> value = new HashMap<>();
+
+        List<FieldExtractionResponse> fieldExtractionResponseList = extractionData.getExtractedFields();
+        for ( FieldExtractionResponse fieldExtractionResponse : fieldExtractionResponseList ) {
+            if ( fieldExtractionResponse.getFieldName().toLowerCase().equals( "merchantname" ) ) {
+                if ( fieldExtractionResponse.getValue().toString() != null
+                    && !fieldExtractionResponse.getValue().toString().isEmpty() ) {
+                    value.put( "value", fieldExtractionResponse.getValue().toString() );
+                } else {
+                    value.put( "value", "" );
+                }
+                merchantMap.put( "merchantname", value );
+            }
+        }
+
+        //local testing
+        value.put( "value", "" );
+        merchantMap.put( "merchantname", value );
+
+
         String scanId = extractionData.getRequestId();
         LOG.info( "Getting Receipt Line Items for scanRequest: {}", scanId );
         /**
          * Line items are extracted in this call
          */
-        LineItemResponse lineItemResponse = receiptLineItemExtractor.getLineObjects( extractedData, extractionData,
+        LineItemResponse lineItemResponse = receiptLineItemExtractor.getLineObjects( merchantMap, extractionData,
             fieldConfiguration );
         LOG.debug( "scan : {}, Line Item Response: {}", scanId, lineItemResponse );
 
@@ -95,13 +118,13 @@ public class ReceiptLineItemSummarizer
             responseMap.put( "lineitems", items );
             LOG.info( "Final line item response : {} for {}", responseMap, scanId );
 
-//            tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
+            //            tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
         }
 
-//        LOG.info( "Extracted {} lineItems for scanId: {} with confidence {}", lineItemResponse.getLineItems().size(), scanId,
-//            lineItemResponse.getConfidence() );
-//        tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
-
+        //        LOG.info( "Extracted {} lineItems for scanId: {} with confidence {}", lineItemResponse.getLineItems().size(), scanId,
+        //            lineItemResponse.getConfidence() );
+        //        tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
+        return responseMap;
     }
 
 

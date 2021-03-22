@@ -95,7 +95,7 @@ public class DocumentMetaData {
 
     public String getMerchantName()
     {
-        return "hy-vee";
+        return merchantName;
     }
 
 

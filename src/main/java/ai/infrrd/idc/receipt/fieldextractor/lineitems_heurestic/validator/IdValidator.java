@@ -19,12 +19,6 @@ import java.util.Map;
 @Component
 public class IdValidator extends FieldValidator
 {
-//    public IdValidator( Domain domain )
-//    {
-//        super( domain );
-//    }
-
-
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger( IdValidator.class );
     private static final String CURRENCY_REGEX = "[$£€]";
     private static final String ID_REGEX = "\\b\\d{4,100}[A-Za-z]{0,2}\\b";
@@ -67,7 +61,7 @@ public class IdValidator extends FieldValidator
                            String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper , Map<String,Object> configuration)
     {
         String inputLine = lineValidator.getRemainingLineString();
-        LOG.info( "Validating id for scanReq : {} and line: {}", extractionHelper.getRequestId(), inputLine );
+        LOG.info( "Validating id for scanReq  line: {}", inputLine );
         float fieldConfidence = ConfidenceCalculator.BASE_CONFIDENCE_VALUE;
         LOG.trace( "Method: setField called." );
         List<String> idsMatched;

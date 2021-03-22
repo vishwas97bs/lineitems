@@ -19,18 +19,12 @@ This class extends the validator abstract class and contains methods to validate
 @Component
 public class QuantityValidator extends FieldValidator
 {
-
-//    public QuantityValidator( Domain domain )
-//    {
-////        super( domain );
-//    }
-
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger( QuantityValidator.class );
     //Regex for quantity
     public static final String QUANTITY_REGEX_INTEGER = "(^| )\\d{1,3}(\\s)(?![.]\\d)";
     public static final String QUANTITY_REGEX_DECIMAL = "\\d{1,3}[., ]?(\\d{2,3})?";
-    public static final String QUANTITY_UNIT_REGEX = "(\\d{1,3}\\s{0,1}[., ]?\\s{0,1}(\\d{2,3})?)|(^| )\\d{1,3}(\\s|ML|x)";
-    public static final String QUANTITY_UOM_REGEX = "(\\d{1,3}(\\.\\d{1,3})?\\s?)(?=(?i)(" + UomValidator.getUomRegex() + "))";
+    static final String QUANTITY_UNIT_REGEX = "(\\d{1,3}\\s{0,1}[., ]?\\s{0,1}(\\d{2,3})?)|(^| )\\d{1,3}(\\s|ML|x)";
+    private static final String QUANTITY_UOM_REGEX = "(\\d{1,3}(\\.\\d{1,3})?\\s?)(?=(?i)(" + UomValidator.getUomRegex() + "))";
 
 
     @Override
@@ -49,8 +43,9 @@ public class QuantityValidator extends FieldValidator
 
 
     @Override
-    public String setField(LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
-                           String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper, Map<String,Object> configuration )
+    public String setField( LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
+        String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper,
+        Map<String, Object> configuration )
     {
         String[] split = new String[10];
         if ( !setAllMatches ) {
@@ -68,8 +63,7 @@ public class QuantityValidator extends FieldValidator
                 indexOfSecondSpace = stringForSecondSpace.indexOf( " " );
             }
         }
-        LOG.info( "Validating quantity for scanReq : {} and line: {}", extractionHelper.getRequestId(),
-            inputLine );
+        LOG.info( "Validating quantity for scanReq line: {}", inputLine );
         /*
          * Converting list of Strings to list of integers
          */

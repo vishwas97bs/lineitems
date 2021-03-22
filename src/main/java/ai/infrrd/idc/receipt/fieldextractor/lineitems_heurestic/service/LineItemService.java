@@ -9,8 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Component
@@ -28,6 +30,7 @@ public class LineItemService
 
     public List<FieldExtractionResponse> extractLineItems( FieldExtractionRequest fieldExtractionRequest )
     {
+        List<FieldExtractionResponse> responseList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         FieldConfiguration fieldConfiguration = new FieldConfiguration();
         if ( fieldExtractionRequest.getMicroserviceFieldConfig() != null ) {
@@ -38,7 +41,16 @@ public class LineItemService
                 e.printStackTrace();
             }
         }
-        receiptLineItemSummarizer.summarize( new HashMap<String, Object>(),new HashMap<String, Object>(), fieldExtractionRequest,new HashMap<String, Object>(), fieldConfiguration );
-       return  null;
+        Map<String, Object> extractedValues = receiptLineItemSummarizer.summarize( new HashMap<>(), fieldExtractionRequest,
+            fieldConfiguration );
+        if ( extractedValues != null && !extractedValues.isEmpty() ) {
+            FieldExtractionResponse fieldExtractionResponse = new FieldExtractionResponse();
+            fieldExtractionResponse.setValue( extractedValues );
+            fieldExtractionResponse.setFieldName( fieldExtractionRequest.getFieldConfigDetails().get( 0 ).getFieldName() );
+            fieldExtractionResponse.setSuccess( true );
+            responseList.add( fieldExtractionResponse );
+            return responseList;
+        }
+        return new ArrayList<>();
     }
 }

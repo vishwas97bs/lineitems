@@ -3,7 +3,6 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.validator;
 import ai.infrrd.idc.commons.entities.FieldExtractionRequest;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.Exceptions.LineExtractionException;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.DocumentMetaData;
-import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.Domain;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineItem;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineValidator;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.BankLineItem;
@@ -15,18 +14,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
+
 @Component
 public class TransactionTypeValidator extends FieldValidator
 {
 
     private static final String TRANSACTION_TYPE_REGEX = "(?i)\\b(CR|DB)\\b";
-
-
-//    public TransactionTypeValidator( Domain domain )
-//    {
-//        super( domain );
-//    }
-
 
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger( TransactionTypeValidator.class );
 
@@ -46,13 +39,14 @@ public class TransactionTypeValidator extends FieldValidator
 
 
     @Override
-    public String setField(LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
-                           String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper, Map<String,Object> configuration)
+    public String setField( LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
+        String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper,
+        Map<String, Object> configuration )
     {
         String inputLine = lineValidator.getRemainingLineString();
-        LOG.info( "Validating transaction type for scanReq : {} and line: {}", extractionHelper.getRequestId(), inputLine );
+        LOG.info( "Validating transaction type for scanReq line: {}", inputLine );
         LOG.trace( "Method: setField called." );
-        if ( dummyLine instanceof BankLineItem) {
+        if ( dummyLine instanceof BankLineItem ) {
             BankLineItem bLine = (BankLineItem) dummyLine;
             float fieldConfidence = ConfidenceCalculator.BASE_CONFIDENCE_VALUE;
             List<String> transactionTypes;

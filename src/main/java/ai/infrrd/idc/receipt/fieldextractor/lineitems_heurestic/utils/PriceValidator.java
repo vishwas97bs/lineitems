@@ -104,18 +104,6 @@ public class PriceValidator extends FieldValidator implements InitializingBean
     //    private static final List<String> CURRENCIES = Arrays.asList( "(\\\\u[a-zA-Z0-9]{4})", "\\*", "«", "Â«", ":",
     //        "[^0-9A-Za-z]{1,100}", "@£", "@", "C", "ce", "e" );
     private float fieldConfidence = 0.0f;
-    //    static {
-    //        for ( String currency : CURRENCIES ) {
-    //            CURRENCIES_STRING.append( "|" + currency );
-    //        }
-    //        CURRENCIES_STRING = new StringBuilder( CURRENCIES_STRING.toString().replaceFirst( "\\|", "" ).replace( "$", "\\$" ) );
-    //        PERFECT_PRICE_REGEX = PERFECT_PRICE_REGEX.replace( "<currencies>", CURRENCIES_STRING );
-    //        PRICE_WITH_SPACES_REGEX = PRICE_WITH_SPACES_REGEX.replace( "<currencies>", CURRENCIES_STRING );
-    //
-    //        PERFECT_PRICE_REGEX_INVOICE = PERFECT_PRICE_REGEX_INVOICE.replace( "<currencies>", CURRENCIES_STRING );
-    //        PRICE_WITH_SPACES_REGEX_INVOICE = PRICE_WITH_SPACES_REGEX_INVOICE.replace( "<currencies>", CURRENCIES_STRING );
-    //    }
-
 
     @Override
     public String setField( LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
@@ -123,7 +111,7 @@ public class PriceValidator extends FieldValidator implements InitializingBean
         Map<String, Object> configuration )
     {
         String inputLine = lineValidator.getRemainingLineString();
-//        LOG.info( "Validating price for scanReq : {} and line: {}", extractionHelper.getRequestId(), inputLine );
+        LOG.info( "Validating price for scanReq  line: {}", inputLine );
         // Get matched prices from perfect match regex
         List<String> priceMatch = getMatchedPrices( inputLine, metaData, merchantSpecificSyntaxRegex );
         if ( !metaData.getDomain().getName().equals( Constants.DOMAIN_NAME.bank ) ) {

@@ -14,15 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
+
 @Component
 public class DateValidator extends FieldValidator
 {
-//    public DateValidator( Domain domain )
-//    {
-//        super( domain );
-//    }
-
-
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger( DateValidator.class );
     private static final String MON = "JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC";
     private static final String MONTH = "JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER";
@@ -45,17 +40,19 @@ public class DateValidator extends FieldValidator
     private Domain domain;
 
     @Autowired
-    public void setDomain(Domain domain) {
+    public void setDomain( Domain domain )
+    {
         this.domain = domain;
     }
 
+
     @Override
-    public String setField(LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
-                           String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper, Map<String,Object> configuration )
+    public String setField( LineItem dummyLine, List<Integer> indexes, boolean setAllMatches, LineValidator lineValidator,
+        String merchantSpecificSyntaxRegex, DocumentMetaData metaData, FieldExtractionRequest extractionHelper,
+        Map<String, Object> configuration )
     {
         String inputLine = lineValidator.getRemainingLineString();
-        LOG.info( "Validating date for scanReq : {} and line: {}", extractionHelper.getRequestId(),
-            inputLine );
+        LOG.info( "Validating date for scanReq  line: {}", inputLine );
         float fieldConfidence = ConfidenceCalculator.BASE_CONFIDENCE_VALUE;
         List<String> datesMatched;
         if ( null != merchantSpecificSyntaxRegex && !merchantSpecificSyntaxRegex.isEmpty() ) {
