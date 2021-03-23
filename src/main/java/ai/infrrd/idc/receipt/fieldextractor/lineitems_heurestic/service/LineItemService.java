@@ -46,10 +46,12 @@ public class LineItemService
         Map<String, Object> extractedValues = receiptLineItemSummarizer.summarize( fieldExtractionRequest, fieldConfiguration );
 
         List<Map<String, Object>> extractedLineItems = (List<Map<String, Object>>) extractedValues.get( "lineitems" );
-        if ( extractedValues != null && !extractedValues.isEmpty() ) {
+        if ( extractedValues != null && !extractedValues.isEmpty() && extractedLineItems != null
+            && extractedLineItems.size() > 0 ) {
             responseList = mapData( extractedLineItems );
             FieldExtractionResponse fieldExtractionResponse = new FieldExtractionResponse();
             fieldExtractionResponse.setListOfValues( responseList );
+            fieldExtractionResponse.setConfidence( Double.parseDouble( extractedValues.get( "confidence" ).toString() ) );
             fieldExtractionResponse.setFieldName( fieldExtractionRequest.getFieldConfigDetails().get( 0 ).getFieldName() );
             fieldExtractionResponse.setSuccess( true );
             responses.add( fieldExtractionResponse );
