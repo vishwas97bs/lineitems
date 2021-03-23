@@ -3,6 +3,7 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.controller;
 import ai.infrrd.idc.commons.entities.FieldExtractionRequest;
 import ai.infrrd.idc.commons.entities.FieldExtractionResponse;
 import ai.infrrd.idc.commons.entities.ResponseObject;
+import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.CustomisedLineItem;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.service.LineItemService;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.util.Constants;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.util.ResponseBuilder;
@@ -51,12 +52,12 @@ public class LineItemController
     @PostMapping ( value = "/lineitems")
     @ApiOperation ( value = "extracting field data", response = FieldExtractionResponse.class)
     @ApiResponses ( value = { @ApiResponse ( code = 200, message = "Successfully extract field data") })
-    public ResponseEntity<ResponseObject> fieldExtract( @RequestBody FieldExtractionRequest fieldExtractionRequest )
+    public ResponseEntity<ResponseObject<List<FieldExtractionResponse<CustomisedLineItem>>>> fieldExtract( @RequestBody FieldExtractionRequest fieldExtractionRequest )
     {
         MDC.put( Constants.LOG_ID, fieldExtractionRequest.getRequestId() );
         long startTime = System.currentTimeMillis();
         LOGGER.info( "field request-----------------------{}", fieldExtractionRequest );
-        List<FieldExtractionResponse> response = lineItemService.extractLineItems( fieldExtractionRequest );
+        List<FieldExtractionResponse<CustomisedLineItem>> response = lineItemService.extractLineItems( fieldExtractionRequest );
         LOGGER.info( "field response-----------------------{}", response );
         long endTime = System.currentTimeMillis();
         LOGGER.info( "Time taken for Field Extractor {} seconds for requestId: {}", ( endTime - startTime ) / 1000.0,

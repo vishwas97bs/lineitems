@@ -50,15 +50,13 @@ public class ReceiptLineItemSummarizer
 
 
     @SuppressWarnings ( "unchecked")
-    public List<FieldExtractionResponse> summarize( FieldExtractionRequest extractionData,
-        FieldConfiguration fieldConfiguration )
+    public Map<String, Object> summarize(FieldExtractionRequest extractionData,
+                                         FieldConfiguration fieldConfiguration )
     {
         LOG.info( "request has entered the summarize method : {}", extractionData.getRequestId() );
         //set the merchantname into this map
         Map<String, Object> merchantMap = new HashMap<>();
         Map<String, Object> value = new HashMap<>();
-        List<Map<String, Object>> extractedLineItems = null;
-        List<FieldExtractionResponse> responseList = new ArrayList<>();
 
         List<FieldExtractionResponse> fieldExtractionResponseList = extractionData.getExtractedFields();
         for ( FieldExtractionResponse fieldExtractionResponse : fieldExtractionResponseList ) {
@@ -121,29 +119,6 @@ public class ReceiptLineItemSummarizer
             responseMap.put( "confidence", lineItemResponse.getConfidence() );
             responseMap.put( "lineitems", items );
             ObjectMapper objectMapper = new ObjectMapper();
-
-            extractedLineItems = (List<Map<String, Object>>) responseMap.get( "lineitems" );
-
-            if ( extractedLineItems == null ) {
-                return null;
-            }
-
-            for ( Map<String, Object> map : extractedLineItems ) {
-                CustomisedLineItem customisedLineItem = new CustomisedLineItem();
-                FieldExtractionResponse fieldExtractionResponse = new FieldExtractionResponse();
-                customisedLineItem.setConfidence( (Double) map.get( "confidence" ) );
-                customisedLineItem.setFinalPrice( (Double) map.get( "finalPrice" ) );
-                customisedLineItem.setLineNumber( (Double) map.get( "lineNumber" ) );
-                customisedLineItem.setCoupon( (Boolean) map.get( "isCoupon" ) );
-                customisedLineItem.setProductId( (String) map.get( "productId" ) );
-                customisedLineItem.setProductName( (String) map.get( "productName" ) );
-                customisedLineItem.setQuantity( (Double) map.get( "quantity" ) );
-                customisedLineItem.setQuantityUnit( (String) map.get( "quantityUnit" ) );
-                customisedLineItem.setRawText( (String) map.get( "rawText" ) );
-                customisedLineItem.setUnitPrice( (Double) map.get( "untiPrice" ) );
-                fieldExtractionResponse.setValue( customisedLineItem );
-                responseList.add( fieldExtractionResponse );
-            }
             LOG.info( "Final line item response : {} for {}", responseMap, scanId );
             //            tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
         }
@@ -151,13 +126,8 @@ public class ReceiptLineItemSummarizer
         //           lineItemResponse.getConfidence() );
         //        tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
         //        return responseMap;
-        FieldExtractionResponse fieldExtractionResponse = new FieldExtractionResponse();
-        fieldExtractionResponse.setListOfValues( responseList );
-        List<FieldExtractionResponse> fieldExtractionResponses = new ArrayList<>();
-        fieldExtractionResponses.add( fieldExtractionResponse );
-
         LOG.info( "request has exiting the summarize method : {}", extractionData.getRequestId() );
-        return fieldExtractionResponses;
+        return responseMap;
     }
 
 

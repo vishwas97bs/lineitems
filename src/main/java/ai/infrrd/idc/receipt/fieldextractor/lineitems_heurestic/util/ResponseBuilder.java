@@ -3,6 +3,8 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.infrrd.idc.commons.entities.FieldExtractionResponse;
+import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.CustomisedLineItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +21,10 @@ public class ResponseBuilder
     @Autowired
     private MessageBuilder messageBuilder;
 
-    public <T> ResponseEntity<ResponseObject> buildSuccessResponse(T data, String successCode )
+    public ResponseEntity<ResponseObject<List<FieldExtractionResponse<CustomisedLineItem>>>> buildSuccessResponse( List<FieldExtractionResponse<CustomisedLineItem>> data,
+        String successCode )
     {
-        ResponseObject<T> response = new ResponseObject<>();
+        ResponseObject response = new ResponseObject<>();
 
         response.setData( data );
         response.setSuccess( new Status( successCode, messageBuilder.getMessage( successCode ) ) );
@@ -30,7 +33,7 @@ public class ResponseBuilder
     }
 
 
-    public ResponseObject buildErrorResponse(String errorCode )
+    public ResponseObject buildErrorResponse( String errorCode )
     {
         ResponseObject responseObject = new ResponseObject();
         responseObject.setErrors( errorBuilder( errorCode ) );
@@ -39,7 +42,7 @@ public class ResponseBuilder
     }
 
 
-    private List<Status> errorBuilder(String errorCode )
+    private List<Status> errorBuilder( String errorCode )
     {
         List<Status> errorList = new ArrayList<>();
         errorList.add( new Status( errorCode, messageBuilder.getMessage( errorCode ) ) );
