@@ -3,7 +3,6 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils;
 import ai.infrrd.idc.commons.entities.FieldExtractionRequest;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.Exceptions.LineExtractionException;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.DocumentMetaData;
-import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.Domain;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineItem;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineValidator;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.service.GimletConfigService;

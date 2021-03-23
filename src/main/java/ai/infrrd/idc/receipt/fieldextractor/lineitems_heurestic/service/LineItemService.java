@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Component
@@ -41,11 +39,11 @@ public class LineItemService
                 e.printStackTrace();
             }
         }
-        Map<String, Object> extractedValues = receiptLineItemSummarizer.summarize( new HashMap<>(), fieldExtractionRequest,
+        List<FieldExtractionResponse> extractedValues = receiptLineItemSummarizer.summarize( fieldExtractionRequest,
             fieldConfiguration );
         if ( extractedValues != null && !extractedValues.isEmpty() ) {
             FieldExtractionResponse fieldExtractionResponse = new FieldExtractionResponse();
-            fieldExtractionResponse.setValue( extractedValues );
+            fieldExtractionResponse.setListOfValues( extractedValues );
             fieldExtractionResponse.setFieldName( fieldExtractionRequest.getFieldConfigDetails().get( 0 ).getFieldName() );
             fieldExtractionResponse.setSuccess( true );
             responseList.add( fieldExtractionResponse );

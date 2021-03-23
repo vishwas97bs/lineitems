@@ -2,7 +2,6 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity;
 
 
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

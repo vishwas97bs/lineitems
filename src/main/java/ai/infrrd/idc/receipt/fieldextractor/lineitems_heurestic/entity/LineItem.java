@@ -3,8 +3,6 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.Exceptions.LineExtractionException;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.Utils;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

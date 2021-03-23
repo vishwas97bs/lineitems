@@ -93,6 +93,7 @@ public class ReceiptLineItemExtractor implements InitializingBean
     public LineItemResponse getLineObjects( Map<String, Object> extractedInputData, FieldExtractionRequest helper,
         FieldConfiguration fieldConfiguration )
     {
+        LOG.info( "request has entered the getLineObjects method : {}", helper.getRequestId() );
         Map<String, Object> configuration = gimletConfigService.getGimletConfig();
         LineItemResponse lineItemResponse = new LineItemResponse();
         String scanRequestId = helper.getRequestId();
@@ -110,7 +111,7 @@ public class ReceiptLineItemExtractor implements InitializingBean
         ConfidenceCalculator confidenceCalculator = new ConfidenceCalculator();
         LOG.debug( "Base for confidence calculation: {}", ConfidenceCalculator.BASE_CONFIDENCE_VALUE );
 
-        /**
+        /*
          *  Get details about receipt
          */
         DocumentMetaData metaData = metaDataExtractor.getDocumentMetaDataFromTextForReceipts( helper,
@@ -121,14 +122,14 @@ public class ReceiptLineItemExtractor implements InitializingBean
             configuration );
         String shortenedText = tuple.f1();
         String rawShortenedText = tuple.f2();
-        /**
+        /*
          *  Get lines from the receipt text as string array
          */
         String[] lines = shortenedText.split( Constants.LINE_SEPARATOR_REGEX );
         String[] rawLines = rawShortenedText.split( Constants.LINE_SEPARATOR_REGEX );
         LOG.debug( "Scanning {} lines from the shortened text for line items for ScanID: {}", lines.length, scanRequestId );
 
-        /**
+        /*
          *  Get syntax of receipt
          */
         metaData.setSyntax( lineItemExtractorUtils.getSyntax( metaData, lines, helper, confidenceCalculator, configuration ) );
@@ -139,7 +140,7 @@ public class ReceiptLineItemExtractor implements InitializingBean
         int noOfLineExtracted = 0;
 
         if ( metaData.getSyntax() != null ) {
-            /**
+            /*
              *  Use syntax to get fields in each line
              */
             lineItems = extractLinesUsingSyntax( lines, rawLines, metaData, helper, confidenceCalculator, configuration,
@@ -154,6 +155,7 @@ public class ReceiptLineItemExtractor implements InitializingBean
         lineItemResponse.setConfidence(
             calculateOverallLineItemConfidence( shortenedText, confidenceCalculator, metaData, noOfLineExtracted, lineItems ) );
         lineItemResponse.setLineItems( lineItems );
+        LOG.info( "request exiting the getLineObjects method : {}", helper.getRequestId() );
         return lineItemResponse;
 
     }
@@ -195,7 +197,7 @@ public class ReceiptLineItemExtractor implements InitializingBean
         FieldExtractionRequest helper, ConfidenceCalculator confidenceCalculator, Map<String, Object> configuration,
         FieldConfiguration fieldConfiguration )
     {
-
+        LOG.info( "request has entered the extractLinesUsingSyntax method : {}", helper.getRequestId() );
         List<LineItem> lineObjects = new LinkedList<>();
         String[] syntaxOrder = metaData.getSyntax().split( Constants.SYNTAX_FIELD_DELIMITER_ESCAPED );
         ReceiptLineItem previousLineObj = null;
@@ -542,6 +544,7 @@ public class ReceiptLineItemExtractor implements InitializingBean
         lineObjects = lineObjects.stream()
             .filter( l -> l.getProductName() != null && ( l.getFinalPrice() != null || l.getProductId() != null ) )
             .collect( Collectors.toList() );
+        LOG.info( "request exiting the extractLinesUsingSyntax method : {}", helper.getRequestId() );
         return lineObjects;
     }
 
@@ -1138,6 +1141,6 @@ public class ReceiptLineItemExtractor implements InitializingBean
     @Override
     public void afterPropertiesSet() throws Exception
     {
-       LOG.info(";;;");
+        LOG.info( ";;;" );
     }
 }

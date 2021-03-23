@@ -3,14 +3,12 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.validator;
 import ai.infrrd.idc.commons.entities.FieldExtractionRequest;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.Exceptions.LineExtractionException;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.DocumentMetaData;
-import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.Domain;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineItem;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineValidator;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.ConfidenceCalculator;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.Constants;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.StringUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

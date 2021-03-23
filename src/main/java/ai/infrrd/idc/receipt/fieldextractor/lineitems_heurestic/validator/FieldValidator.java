@@ -2,7 +2,6 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.validator;
 
 import ai.infrrd.idc.commons.entities.FieldExtractionRequest;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.DocumentMetaData;
-import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.Domain;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineItem;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.entity.LineValidator;
 

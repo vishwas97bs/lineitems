@@ -161,7 +161,7 @@ public class SyntaxExtractor
             LOG.debug( "Only one syntax is present in the syntax map, hence setting it as final syntax {}", maxCountSyntax );
             finalSyntax = maxCountSyntax;
         }
-        /**
+        /*
          *  First try : Get syntax with max count if the difference between the second max and the first max is > MAX_DIFFERENCE_BETWEEN_SYNTAXES
          */
         LOG.trace( "First try : Get syntax with max count if the difference between the second max and the first max is > {}",
@@ -187,7 +187,7 @@ public class SyntaxExtractor
         if ( syntaxesWithMaxFields.size() == 1 && ( syntaxInLinesMap.get( syntaxesWithMaxFields.iterator().next() ).size() != 1
             || syntaxInLinesMap.get( syntaxesWithMaxFields.iterator().next() ).size() == syntaxInLinesMap
                 .get( syntaxesWithSameMax.iterator().next() ).size() ) ) {
-            /**
+            /*
              * Second try : get the single syntax with max number of fields present in it and has atleast 2 lines with this syntax
              */
             finalSyntax = syntaxesWithMaxFields.iterator().next();
@@ -200,7 +200,7 @@ public class SyntaxExtractor
             int max = 0;
             String maxSyntax = null;
             boolean maxRepeat = false;
-            /**
+            /*
              * Third try : get the max - field syntax that has max number of lines
              */
             for ( String syntaxWithMaxFields : syntaxesWithMaxFields ) {
@@ -220,7 +220,7 @@ public class SyntaxExtractor
                 finalSyntax = maxSyntax;
             }
 
-            /**
+            /*
              * Fourth try : get the syntax that follows the default syntax with the highest priority
              */
             if ( finalSyntax == null ) {
@@ -241,7 +241,7 @@ public class SyntaxExtractor
 
         }
         if ( finalSyntax == null && maxCountSyntax != null ) {
-            /**
+            /*
              * Fifth try : just pick the first syntax with max number of lines
              */
             finalSyntax = maxCountSyntax;

@@ -3,13 +3,11 @@ package ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.extractor.ReceiptLineItemExtractor;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.LineItemConstants;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.MongoConnector;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

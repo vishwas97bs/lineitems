@@ -195,9 +195,7 @@ public class ProductNameValidator extends FieldValidator
             }
             probableName = removeUnneccessaryCharactersFromName( probableName );
             dummyLine.setProductName( probableName );
-            /**
-             * Setting isCoupon value
-             */
+
             if ( domain.getName().equals( Constants.DOMAIN_NAME.receipt ) ) {
                 discountListValidator.setDiscountList( dummyLine, lineValidator.getLineStr(), probableName, metaData,
                     extractionData );

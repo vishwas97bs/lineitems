@@ -8,7 +8,6 @@ import ai.infrrd.idc.spellcheckutility.entities.request.SpellCheckCategoryReques
 import ai.infrrd.idc.spellcheckutility.entities.request.SpellCheckRequestEntity;
 import ai.infrrd.idc.spellcheckutility.entities.response.LocaleDetectionResponseEntity;
 import okhttp3.OkHttpClient;
-import org.springframework.stereotype.Component;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

@@ -10,6 +10,7 @@ import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.extractor.Receip
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.CoordinatesExtractor;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.SpellCheckClient;
 import ai.infrrd.idc.receipt.fieldextractor.lineitems_heurestic.utils.Utils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -49,16 +50,19 @@ public class ReceiptLineItemSummarizer
 
 
     @SuppressWarnings ( "unchecked")
-    public Map<String, Object> summarize( Map<String, Object> extractedData, FieldExtractionRequest extractionData,
+    public List<FieldExtractionResponse> summarize( FieldExtractionRequest extractionData,
         FieldConfiguration fieldConfiguration )
     {
+        LOG.info( "request has entered the summarize method : {}", extractionData.getRequestId() );
         //set the merchantname into this map
         Map<String, Object> merchantMap = new HashMap<>();
         Map<String, Object> value = new HashMap<>();
+        List<Map<String, Object>> extractedLineItems = null;
+        List<FieldExtractionResponse> responseList = new ArrayList<>();
 
         List<FieldExtractionResponse> fieldExtractionResponseList = extractionData.getExtractedFields();
         for ( FieldExtractionResponse fieldExtractionResponse : fieldExtractionResponseList ) {
-            if ( fieldExtractionResponse.getFieldName().toLowerCase().equals( "merchantname" ) ) {
+            if ( fieldExtractionResponse.getFieldName().toLowerCase().equals( "receipt_merchantname" ) ) {
                 if ( fieldExtractionResponse.getValue().toString() != null
                     && !fieldExtractionResponse.getValue().toString().isEmpty() ) {
                     value.put( "value", fieldExtractionResponse.getValue().toString() );
@@ -76,7 +80,7 @@ public class ReceiptLineItemSummarizer
 
         String scanId = extractionData.getRequestId();
         LOG.info( "Getting Receipt Line Items for scanRequest: {}", scanId );
-        /**
+        /*
          * Line items are extracted in this call
          */
         LineItemResponse lineItemResponse = receiptLineItemExtractor.getLineObjects( merchantMap, extractionData,
@@ -88,13 +92,13 @@ public class ReceiptLineItemSummarizer
 
 
         if ( null != lineItemResponse ) {
-            /**
+            /*
              * Line item spell check
              */
             List<LineItem> lineItems = lineItemResponse.getLineItems();
             LineItemCheckRequest lineItemCheckRequest = new LineItemCheckRequest();
             Map<String, Object> filters = new HashMap<>();
-            String merchantName = utils.getMerchantName( extractedData );
+            String merchantName = utils.getMerchantName( merchantMap );
             LOG.debug( "Merchant Name: {} for {}", merchantName, scanId );
             if ( merchantName != null && !StringUtils.isEmpty( merchantName ) && fieldConfiguration != null
                 && !StringUtils.isEmpty( fieldConfiguration.getCustomerId() ) ) {
@@ -116,15 +120,44 @@ public class ReceiptLineItemSummarizer
             //            }
             responseMap.put( "confidence", lineItemResponse.getConfidence() );
             responseMap.put( "lineitems", items );
-            LOG.info( "Final line item response : {} for {}", responseMap, scanId );
+            ObjectMapper objectMapper = new ObjectMapper();
 
+            extractedLineItems = (List<Map<String, Object>>) responseMap.get( "lineitems" );
+
+            if ( extractedLineItems == null ) {
+                return null;
+            }
+
+            for ( Map<String, Object> map : extractedLineItems ) {
+                CustomisedLineItem customisedLineItem = new CustomisedLineItem();
+                FieldExtractionResponse fieldExtractionResponse = new FieldExtractionResponse();
+                customisedLineItem.setConfidence( (Double) map.get( "confidence" ) );
+                customisedLineItem.setFinalPrice( (Double) map.get( "finalPrice" ) );
+                customisedLineItem.setLineNumber( (Double) map.get( "lineNumber" ) );
+                customisedLineItem.setCoupon( (Boolean) map.get( "isCoupon" ) );
+                customisedLineItem.setProductId( (String) map.get( "productId" ) );
+                customisedLineItem.setProductName( (String) map.get( "productName" ) );
+                customisedLineItem.setQuantity( (Double) map.get( "quantity" ) );
+                customisedLineItem.setQuantityUnit( (String) map.get( "quantityUnit" ) );
+                customisedLineItem.setRawText( (String) map.get( "rawText" ) );
+                customisedLineItem.setUnitPrice( (Double) map.get( "untiPrice" ) );
+                fieldExtractionResponse.setValue( customisedLineItem );
+                responseList.add( fieldExtractionResponse );
+            }
+            LOG.info( "Final line item response : {} for {}", responseMap, scanId );
             //            tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
         }
-
         //        LOG.info( "Extracted {} lineItems for scanId: {} with confidence {}", lineItemResponse.getLineItems().size(), scanId,
-        //            lineItemResponse.getConfidence() );
+        //           lineItemResponse.getConfidence() );
         //        tabularData.put( fieldDetails.get( "fieldName" ).toString(), responseMap );
-        return responseMap;
+        //        return responseMap;
+        FieldExtractionResponse fieldExtractionResponse = new FieldExtractionResponse();
+        fieldExtractionResponse.setListOfValues( responseList );
+        List<FieldExtractionResponse> fieldExtractionResponses = new ArrayList<>();
+        fieldExtractionResponses.add( fieldExtractionResponse );
+
+        LOG.info( "request has exiting the summarize method : {}", extractionData.getRequestId() );
+        return fieldExtractionResponses;
     }
 
 
